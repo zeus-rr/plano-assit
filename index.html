@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASSIST RJ - Benefícios para Servidores</title>
+    
+    <!-- ÍCONE DA ABA (FAVICON) -->
+    <link rel="icon" type="image/png" href="URL_DA_IMAGEM_AQUI">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .hero-gradient { background: linear-gradient(135deg, #004a99 0%, #0072ff 100%); }
+        
+        /* Estilos do Modal de Benefícios (Existente) */
+        .card-hover { cursor: pointer; transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .brand-logo { object-fit: cover; border-radius: 8px; }
+        
+        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 50; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: white; max-width: 500px; width: 100%; border-radius: 20px; padding: 30px; position: relative; max-height: 90vh; overflow-y: auto; }
+
+        /* NOVO: Estilos específicos para a Pop-up de Imagem Promocional */
+        #promoModal { 
+            display: none; /* Escondido por padrão, aberto via JS */
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0,0,0,0.85); /* Fundo mais escuro para destaque */
+            z-index: 100; /* Acima de tudo */
+            align-items: center; 
+            justify-content: center; 
+            padding: 20px; 
+        }
+        .promo-modal-content { 
+            position: relative; 
+            max-width: 90%; /* Ajuste para celular */
+            max-height: 90vh; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .promo-modal-image {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            object-fit: contain; /* Garante que a imagem inteira apareça */
+        }
+        .close-promo {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: #ff4d4d; /* Vermelho para destaque */
+            color: white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background 0.3s;
+            z-index: 101; /* Acima da imagem */
+        }
+        .close-promo:hover {
+            background: #ff1a1a;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+
+    <!-- NOVO: POP-UP (MODAL) DA IMAGEM PROMOCIONAL (Abre automaticamente) -->
+    <div id="promoModal" onclick="closePromoModal(event)">
+        <div class="promo-modal-content" onclick="event.stopPropagation()">
+            <!-- Botão Fechar (X) -->
+            <div class="close-promo" onclick="closePromoModal()">
+                <i class="fas fa-times"></i>
+            </div>
+            <!-- A Imagem Promocional -->
+            <img src="blob:https://web.whatsapp.com/deca7c38-741c-4890-990a-168ee56bc0c8" alt="Promoção ASSIST RJ" class="promo-modal-image">
+        </div>
+    </div>
+
+    <!-- MODAL DE BENEFÍCIOS (Invisível por padrão, abre no clique dos cards) -->
+    <div id="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div id="modal-body">
+                <!-- Conteúdo injetado via JS -->
+            </div>
+            <div class="mt-8 text-center">
+                <button onclick="closeModal()" class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGOTIPO NO TOPO -->
+    <div class="bg-white py-4 shadow-sm text-center">
+        <img src="URL_DA_IMAGEM_AQUI" alt="Logo ASSIST RJ" class="h-20 mx-auto brand-logo">
+    </div>
+
+    <header class="hero-gradient text-white py-12 px-4 text-center shadow-lg">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">ASSIST RJ</h1>
+        <p class="text-xl md:text-2xl font-light max-w-2xl mx-auto">
+            Associação dos Servidores Municipais, Estaduais e Federais do Rio de Janeiro.
+        </p>
+        <div class="mt-8">
+            <a href="https://wa.me/5521967713618" target="_blank" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full inline-flex items-center transition duration-300 shadow-xl">
+                <i class="fab fa-whatsapp mr-2 text-2xl"></i> Falar com um Consultor
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-blue-900 mb-4">Benefícios Exclusivos</h2>
+            <p class="text-gray-600 font-medium italic">Clique em cada card para ver os detalhes completos.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <!-- SAÚDE -->
+            <div onclick="openModal('saude')" class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-blue-600 card-hover text-center">
+                <div class="text-blue-600 text-4xl mb-4"><i class="fas fa-user-md"></i></div>
+                <h3 class="text-xl font-bold mb-3">Saúde Completa</h3>
+                <p class="text-gray-600 text-sm">Consultas, exames e rede credenciada de excelência. Clique para ver mais.</p>
+            </div>
+
+            <!-- ODONTO -->
+            <div onclick="openModal('odonto')" class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-blue-600 card-hover text-center">
+                <div class="text-blue-600 text-4xl mb-4"><i class="fas fa-tooth"></i></div>
+                <h3 class="text-xl font-bold mb-3">Odontologia</h3>
+                <p class="text-gray-600 text-sm">Tratamentos de qualidade para toda a família. Clique para ver mais.</p>
+            </div>
+
+            <!-- FUNERAL -->
+            <div onclick="openModal('funeral')" class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-blue-600 card-hover text-center">
+                <div class="text-blue-600 text-4xl mb-4"><i class="fas fa-shield-alt"></i></div>
+                <h3 class="text-xl font-bold mb-3">Auxílio Funeral e Seguro</h3>
+                <p class="text-gray-600 text-sm">Segurança e suporte nos momentos difíceis. Clique para ver mais.</p>
+            </div>
+
+            <!-- CLUBE -->
+            <div onclick="openModal('clube')" class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-blue-600 card-hover text-center">
+                <div class="text-blue-600 text-4xl mb-4"><i class="fas fa-tags"></i></div>
+                <h3 class="text-xl font-bold mb-3">Clube de Descontos</h3>
+                <p class="text-gray-600 text-sm">Descontos em lojas, faculdades e lazer. Clique para ver mais.</p>
+            </div>
+
+            <!-- LAZER -->
+            <div onclick="openModal('lazer')" class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-blue-600 card-hover text-center">
+                <div class="text-blue-600 text-4xl mb-4"><i class="fas fa-umbrella-beach"></i></div>
+                <h3 class="text-xl font-bold mb-3">Lazer e Cultura</h3>
+                <p class="text-gray-600 text-sm">Colônias de férias e eventos esportivos. Clique para ver mais.</p>
+            </div>
+
+            <!-- JURIDICO -->
+            <div onclick="openModal('juridico')" class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-blue-600 card-hover text-center">
+                <div class="text-blue-600 text-4xl mb-4"><i class="fas fa-gavel"></i></div>
+                <h3 class="text-xl font-bold mb-3">Assistência Jurídica</h3>
+                <p class="text-gray-600 text-sm">Suporte especializado em diversas áreas. Clique para ver mais.</p>
+            </div>
+
+        </div>
+
+        <div class="mt-16 bg-blue-900 text-white p-8 rounded-3xl text-center shadow-2xl">
+            <h3 class="text-2xl font-bold mb-4 uppercase">Sem Limite de Idade!</h3>
+            <p class="mb-6 opacity-90 italic">O menor custo mensal para o servidor público do Rio de Janeiro.</p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4">
+                <span class="text-xl font-semibold"><i class="fas fa-phone-alt mr-2"></i> (21) 96771-3618</span>
+                <a href="https://wa.me/5521967713618" target="_blank" class="bg-white text-blue-900 px-8 py-2 rounded-full font-bold hover:bg-gray-100 transition duration-300 uppercase">
+                    Adira Agora
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-100 py-8 border-t border-gray-200 text-center">
+        <div class="text-gray-500 text-sm px-4">
+            <p class="font-bold">ASSIST RJ - Tradição e Confiança para o Servidor</p>
+            <p class="mt-2 text-xs">&copy; 2026 - Todos os direitos reservados.</p>
+            <hr class="my-4 border-gray-300 w-1/4 mx-auto">
+            <p class="font-black text-gray-700 tracking-widest mt-2 uppercase">Esta página é uma divulgação</p>
+        </div>
+    </footer>
+
+    <script>
+        // Conteúdo dos Modais de Benefícios (Existente)
+        const content = {
+            saude: `
+                <h2 class="text-2xl font-bold text-blue-700 mb-4">Mais Saúde</h2>
+                <ul class="space-y-2 text-gray-700 text-left list-disc list-inside">
+                    <li>Consultas Especializadas</li>
+                    <li>Procedimentos Ambulatoriais</li>
+                    <li>Exames Laboratoriais</li>
+                    <li>Exames Radiológicos Simples</li>
+                    <li>Exames Cardiológico</li>
+                    <li>Exames Neurológico</li>
+                    <li>Exames de Imagem</li>
+                    <li>Exames Gasatroenterológicos</li>
+                    <li>Fisioterapia Pós-trauma</li>
+                </ul>`,
+            odonto: `
+                <h2 class="text-2xl font-bold text-blue-700 mb-4">Mais Saúde</h2>
+                <p class="text-xs text-gray-500 mb-4 italic text-left">Com rol deliberado em período anterior à vigência da Lei 9.656/98.</p>
+                <ul class="space-y-2 text-gray-700 text-left list-disc list-inside">
+                    <li>Consulta</li>
+                    <li>Prevenção</li>
+                    <li>Dentística</li>
+                    <li>Endodontia</li>
+                    <li>Odontopediatria</li>
+                    <li>Periodontia</li>
+                    <li>Prótese Dentária</li>
+                    <li>Radiologia</li>
+                    <li>Consulta Odontológica de Urgência</li>
+                    <li>Cirurgia Oral</li>
+                </ul>`,
+            funeral: `
+                <h2 class="text-2xl font-bold text-blue-700 mb-4">Mais Segurança</h2>
+                <p class="text-gray-700 text-left">Com cobertura em caso de falecimento, independente da causa. Estão garantidos os serviços conforme contrato coletivo, através da empresa contratada.</p>`,
+            clube: `
+                <h2 class="text-2xl font-bold text-blue-700 mb-4">Mais Lazer</h2>
+                <p class="text-gray-700 text-left font-semibold">Aproveite um dia de lazer no Clube Megaville Guaratiba ou Itaboraí com os seus Beneficiários.</p>`,
+            lazer: `
+                <h2 class="text-2xl font-bold text-blue-700 mb-4">Mais Esporte e Lazer</h2>
+                <p class="text-gray-700 text-left mb-4">Disponibilização de participação de eventos de corridas e caminhadas promovidas no Estado do Rio de Janeiro, com estrutura de apoio, hidratação, lanche, guarda-volumes, massagem, aquecimento e alongamentos.</p>
+                <hr class="my-4">
+                <h2 class="text-2xl font-bold text-blue-700 mb-4">Mais Cultura e Lazer</h2>
+                <p class="text-gray-700 text-left">O Associado e seus Beneficiários aproveitam passeios e momentos culturais como visitas guiadas a museus, piqueniques em parques e espaços abertos, bem como acesso facilitado a espaços privados de lazer em instituições parceiras da ASSIST.</p>`,
+            juridico: `
+                <h2 class="text-2xl font-bold text-blue-700 mb-4">Mais Segurança</h2>
+                <div class="text-left text-gray-700">
+                    <p class="font-bold mb-2">Área Cível:</p>
+                    <ul class="list-disc list-inside mb-4 ml-2">
+                        <li>Direito da Família</li>
+                        <li>Inventário</li>
+                        <li>Relação de Consumo</li>
+                        <li>Direito de propriedade</li>
+                    </ul>
+                    <p class="italic text-sm">Área Trabalhista, respeitando as normas internas da entidade.</p>
+                </div>`
+        };
+
+        // Funções do Modal de Benefícios (Existente)
+        function openModal(key) {
+            document.getElementById('modal-body').innerHTML = content[key];
+            document.getElementById('modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Trava o scroll do fundo
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            document.body.style.overflow = 'auto'; // Destrava o scroll
+        }
+
+        // NOVO: Funções JavaScript para a Pop-up de Imagem Promocional
+
+        // 1. Abre a pop-up automaticamente ao carregar a página
+        window.onload = function() {
+            // Pequeno delay para garantir que a página carregou visualmente antes da pop-up
+            setTimeout(function() {
+                openPromoModal();
+            }, 500); // 500ms de delay
+        };
+
+        function openPromoModal() {
+            document.getElementById('promoModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Trava o scroll do fundo
+        }
+		
+				// Bloquear clique direito
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+// Bloquear atalhos de desenvolvedor (F12, Ctrl+Shift+I, Ctrl+U)
+document.onkeydown = function(e) {
+    if (e.keyCode == 123 || 
+        (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || 
+        (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+        return false;
+    }
+};
+        function closePromoModal(event) {
+            // Se a função foi chamada pelo clique no fundo (event existe), verifica se o clique foi fora da imagem
+            if (event && event.target !== document.getElementById('promoModal')) {
+                return; // Clicou dentro da imagem, não faz nada
+            }
+            document.getElementById('promoModal').style.display = 'none';
+            document.body.style.overflow = 'auto'; // Destrava o scroll
+        }
+    </script>
+</body>
+</html>
