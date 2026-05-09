@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASSIST RJ - Benefícios para Servidores</title>
+    
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" href="apple-touch-icon.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .hero-gradient { background: linear-gradient(135deg, #004a99 0%, #0072ff 100%); }
+        .card-hover { cursor: pointer; transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .brand-logo { object-fit: contain; border-radius: 8px; }
+        
+        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 150; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: white; max-width: 600px; width: 100%; border-radius: 20px; padding: 30px; position: relative; max-height: 90vh; overflow-y: auto; }
+
+        #promoModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+        .promo-modal-content { position: relative; max-width: 90%; max-height: 90vh; }
+        .promo-modal-image { max-width: 100%; max-height: 85vh; border-radius: 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.3); object-fit: contain; }
+        .close-promo {
+            position: absolute; top: -15px; right: -15px; background: #ff4d4d; color: white;
+            border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center;
+            justify-content: center; font-size: 20px; cursor: pointer; z-index: 201;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+
+    <!-- POP-UP PROMOCIONAL -->
+    <div id="promoModal" onclick="closePromoModal(event)">
+        <div class="promo-modal-content" onclick="event.stopPropagation()">
+            <div class="close-promo" onclick="closePromoModal()">
+                <i class="fas fa-times"></i>
+            </div>
+            <img src="promo.jpg" alt="Promoção ASSIST RJ" class="promo-modal-image">
+        </div>
+    </div>
+
+    <!-- MODAL DE CONTEÚDO -->
+    <div id="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div id="modal-body"></div>
+            <div class="mt-8 text-center">
+                <button onclick="closeModal()" class="bg-blue-600 text-white px-8 py-2 rounded-full font-bold">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGO -->
+    <div class="bg-white py-4 shadow-sm text-center">
+        <img src="logo.png" alt="Logo ASSIST RJ" class="h-16 mx-auto brand-logo">
+    </div>
+
+    <header class="hero-gradient text-white py-12 px-4 text-center shadow-lg">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">ASSIST RJ</h1>
+        <p class="text-xl md:text-2xl font-light max-w-2xl mx-auto">Associação dos Servidores Municipais, Estaduais e Federais do Rio de Janeiro.</p>
+        <div class="mt-8">
+            <a href="https://wa.me/5521967713618" target="_blank" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full inline-flex items-center transition duration-300 shadow-xl">
+                <i class="fab fa-whatsapp mr-2 text-2xl"></i> Falar com um Consultor
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-blue-900 mb-2">Benefícios Exclusivos</h2>
+            <p class="text-gray-600 italic">Explore as vantagens de ser um associado.</p>
+        </div>
+
+        <!-- GRID DE CARDS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+            
+            <div onclick="openModal('saude')" class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-blue-600 card-hover text-center">
+                <div class="text-blue-600 text-4xl mb-4"><i class="fas fa-user-md"></i></div>
+                <h3 class="text-xl font-bold mb-3">Saúde Completa</h3>
+                <p class="text-gray-600 text-sm">Consultas e rede credenciada de excelência.</p>
+            </div>
+
+            <div onclick="openModal('odonto')" class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-blue-600 card-hover text-center">
+                <div class="text-blue-600 text-4xl mb-4"><i class="fas fa-tooth"></i></div>
+                <h3 class="text-xl font-bold mb-3">Odontologia</h3>
+                <p class="text-gray-600 text-sm">Tratamentos de qualidade para toda a família.</p>
+            </div>
+
+            <div onclick="openModal('funeral')" class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-blue-600 card-hover text-center">
+                <div class="text-blue-600 text-4xl mb-4"><i class="fas fa-shield-alt"></i></div>
+                <h3 class="text-xl font-bold mb-3">Auxílio Funeral e Seguro</h3>
+                <p class="text-gray-600 text-sm">Segurança e suporte nos momentos difíceis.</p>
+            </div>
+
+            <div onclick="openModal('clube')" class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-blue-600 card-hover text-center">
+                <div class="text-blue-600 text-4xl mb-4"><i class="fas fa-tags"></i></div>
+                <h3 class="text-xl font-bold mb-3">Clube de Descontos</h3>
+                <p class="text-gray-600 text-sm">Lazer no Megaville e diversas parcerias.</p>
+            </div>
+
+            <div onclick="openModal('lazer')" class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-blue-600 card-hover text-center">
+                <div class="text-blue-600 text-4xl mb-4"><i class="fas fa-umbrella-beach"></i></div>
+                <h3 class="text-xl font-bold mb-3">Lazer e Cultura</h3>
+                <p class="text-gray-600 text-sm">Colônias de férias e eventos esportivos.</p>
+            </div>
+
+            <div onclick="openModal('juridico')" class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-blue-600 card-hover text-center">
+                <div class="text-blue-600 text-4xl mb-4"><i class="fas fa-gavel"></i></div>
+                <h3 class="text-xl font-bold mb-3">Assistência Jurídica</h3>
+                <p class="text-gray-600 text-sm">Suporte especializado para o servidor.</p>
+            </div>
+        </div>
+
+        <!-- CARD DE VÍDEO CENTRALIZADO ABAIXO -->
+        <div class="flex justify-center mb-16">
+            <div onclick="openModal('videos')" class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-red-600 card-hover text-center w-full md:w-1/3">
+                <div class="text-red-600 text-4xl mb-4"><i class="fas fa-play-circle"></i></div>
+                <h3 class="text-xl font-bold mb-3">Assistir Vídeos</h3>
+                <p class="text-gray-600 text-sm">Conheça nossos benefícios em vídeo e tutoriais.</p>
+            </div>
+        </div>
+
+        <!-- CALL TO ACTION -->
+        <div class="bg-blue-900 text-white p-8 rounded-3xl text-center shadow-2xl">
+            <h3 class="text-2xl font-bold mb-4 uppercase">Sem Limite de Idade!</h3>
+            <p class="mb-6 opacity-90 italic">O menor custo mensal para o servidor público do Rio de Janeiro.</p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4">
+                <span class="text-xl font-semibold"><i class="fas fa-phone-alt mr-2"></i> (21) 96771-3618</span>
+                <a href="https://wa.me/5521967713618" target="_blank" class="bg-white text-blue-900 px-8 py-2 rounded-full font-bold hover:bg-gray-100 transition duration-300">ADIRA AGORA</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-100 py-8 text-center border-t border-gray-200">
+        <div class="text-gray-500 text-sm px-4">
+            <p class="font-bold">ASSIST RJ - Tradição e Confiança para o Servidor</p>
+            <p class="mt-2 text-xs">&copy; 2026 - Todos os direitos reservados.</p>
+            <p class="font-black text-gray-700 tracking-widest mt-2 uppercase">Esta página é uma divulgação</p>
+        </div>
+    </footer>
+
+    <script>
+        const content = {
+            saude: `<h2 class="text-2xl font-bold text-blue-700 mb-4">Saúde</h2><ul class="text-left list-disc list-inside space-y-2"><li>Consultas Especializadas</li><li>Procedimentos Ambulatoriais</li><li>Exames Laboratoriais</li><li>Fisioterapia Pós-trauma</li></ul>`,
+            odonto: `<h2 class="text-2xl font-bold text-blue-700 mb-4">Odontologia</h2><ul class="text-left list-disc list-inside space-y-2"><li>Prevenção</li><li>Endodontia</li><li>Prótese Dentária</li><li>Cirurgia Oral</li></ul>`,
+            funeral: `<h2 class="text-2xl font-bold text-blue-700 mb-4">Segurança</h2><p class="text-gray-700 text-left">Cobertura completa em caso de falecimento, independente da causa, conforme contrato coletivo.</p>`,
+            clube: `<h2 class="text-2xl font-bold text-blue-700 mb-4">Clube de Descontos</h2><p class="text-gray-700 text-left">Aproveite lazer no Clube Megaville e descontos exclusivos em parceiros.</p>`,
+            lazer: `<h2 class="text-2xl font-bold text-blue-700 mb-4">Lazer e Cultura</h2><p class="text-gray-700 text-left">Eventos esportivos, colônias de férias e passeios culturais guiados.</p>`,
+            juridico: `<h2 class="text-2xl font-bold text-blue-700 mb-4">Assistência Jurídica</h2><p class="text-gray-700 text-left">Suporte em Direito de Família, Inventários e Relações de Consumo.</p>`,
+            videos: `<h2 class="text-2xl font-bold text-red-600 mb-4">Galeria de Vídeos</h2><div class="relative w-full" style="padding-bottom: 56.25%;"><iframe class="absolute top-0 left-0 w-full h-full rounded-lg" src="https://www.youtube.com/watch?v=GMyUHVTZ4SE" frameborder="0" allowfullscreen></iframe></div>`
+        };
+
+        function openModal(key) {
+            document.getElementById('modal-body').innerHTML = content[key];
+            document.getElementById('modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal-body').innerHTML = '';
+            document.getElementById('modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('promoModal').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }, 500);
+        };
+
+        function closePromoModal(e) {
+            if (e && e.target !== document.getElementById('promoModal') && e.target.className !== 'close-promo') return;
+            document.getElementById('promoModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Segurança
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.onkeydown = e => {
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false;
+        };
+    </script>
+</body>
+</html>
